@@ -9,7 +9,7 @@ public class BmoBot {
     //default modifier package private
     final static boolean testingMode = true;
     final static String testingServerId = "197431852225527809";
-    private final static String token = "OTE0Mzk1NTQzMTQzMzMzODg4.YaMbNg.QZ_FsDSOvMDilvmbqxfGIG81aTQ";
+    private final static String token = "OTE0Mzk1NTQzMTQzMzMzODg4.YaMbNg.GY2ICsiM0ZXl_cVSjfjBaY5zSCY";
 
     public static void main(String[] args) throws LoginException {
         JDA jda = JDABuilder.createLight(token, GatewayIntent.GUILD_MESSAGES).build();
