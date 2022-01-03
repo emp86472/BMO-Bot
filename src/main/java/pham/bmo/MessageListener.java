@@ -1,3 +1,5 @@
+package pham.bmo;
+
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -5,29 +7,30 @@ import java.util.Random;
 
 public class MessageListener extends ListenerAdapter {
 
+    private Random rand = new Random();
+
     public void onMessageReceived(MessageReceivedEvent event) {
         //conditions that stop the program
         if (event.getMessage().getGuild().getId().equals(BmoBot.testingServerId) != BmoBot.testingMode) return;
         if (event.getAuthor().isBot()) return;
-        //if (event.getAuthor().getAsTag().equals("synrg#1396")) return;
+
 
         //use this for rng
-        Random rand = new Random();
+        //Random rand = new Random();
         String[] adverb = {"very", "extremely", "really", "exceptionally", "genuinely"};
         String[] adjective = {"pretty", "gorgeous", "beautiful", "amazing", "stunning", "adorable", "lovely", "cute"};
         String[] emoticon = {":3", ":)", ":D", "!"};
         String[] bodypart = {"nails", "eyes", "lips", "eyelashes", "cheeks"};
 
-        String keyword = event.getMessage().getContentDisplay();
+        String keyword = event.getMessage().getContentRaw();
         keyword = keyword.toLowerCase();
 
         String[] result = keyword.split("\\s");
         if (result[0].equals(">>")) {
-            try {
                 if (result[1].equalsIgnoreCase("compliment")) {
                     String response;
                     int chance = rand.nextInt(3);
-                    if (rand.nextInt(100) == 0) {
+                    if (rand.nextInt(50) == 0) {
                         event.getChannel().sendMessage("nice ass").queue();
                     } else {
                         switch (chance) {
@@ -55,13 +58,22 @@ public class MessageListener extends ListenerAdapter {
                                 event.getChannel().sendMessage(response).queue();
                                 break;
                         } //switch
+
                     } //if
 
+                } else if (result[1].equalsIgnoreCase("echo")) {
+                    String response = "";
+                    for (int i = 2; i < result.length; i++) {
+                        response += result[i] + " ";
+                    } //for
+                    event.getChannel().sendMessage(response).queue();
+                } else if (result[1].equalsIgnoreCase("trivia")) {
+                    if (result.length > 3) {
+
+                    } //if
                 } //if
-            } catch (IndexOutOfBoundsException ioobe) {
-                event.getChannel().sendMessage("invalid command").queue();
-            } //try
         } else {
+            if (event.getAuthor().getAsTag().equals("synrg#1396")) return;
             if (keyword.contains("candies")) {
                 event.getChannel().sendMessage("Candies nuts fit in your mouth!? XD").queue();
             } else if (keyword.contains("gargalon")) {
@@ -74,10 +86,16 @@ public class MessageListener extends ListenerAdapter {
                 event.getChannel().sendMessage("Kansas dick fit in your mouth? LOL").queue();
             } else if (keyword.contains("joe")) {
                 event.getChannel().sendMessage("joe mama xd").queue();
-            }else if (keyword.contains("sugondese")) {
+            } else if (keyword.contains("sugondese")) {
                 event.getChannel().sendMessage("sugondese NUTS lmaoooo").queue();
-            }else if (keyword.contains("ligma")) {
+            } else if (keyword.contains("ligma")) {
                 event.getChannel().sendMessage("ligma balls heh").queue();
+            } else if (keyword.contains("liek")) {
+                event.getChannel().sendMessage("You misspelled 'like' " + emoticon[rand.nextInt(emoticon.length)]).queue();
+            } else if (keyword.contains("i love you")) {
+                event.getMessage().reply("Geez, get a room .-.").queue();
+            } else if (keyword.contains(" mad ")) {
+                event.getChannel().sendMessage("madge? lmao").queue();
             } //if
         } //if
 
