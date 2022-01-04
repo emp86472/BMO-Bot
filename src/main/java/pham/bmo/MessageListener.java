@@ -3,6 +3,8 @@ package pham.bmo;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import pham.bmo.commands.Command;
+import static pham.config.Config.TEST_MODE;
+import static pham.config.Config.TEST_SERVER_ID;
 
 import java.util.Random;
 
@@ -12,7 +14,7 @@ public class MessageListener extends ListenerAdapter {
 
     public void onMessageReceived(MessageReceivedEvent event) {
         //conditions that stop the program
-        if (event.getMessage().getGuild().getId().equals(BmoBot.testingServerId) != BmoBot.testingMode) return;
+        if (event.getMessage().getGuild().getId().equals(TEST_SERVER_ID) != TEST_MODE) return;
         if (event.getAuthor().isBot()) return;
 
         String[] emoticon = {":3", ":)", ":D", "!"};
@@ -48,7 +50,7 @@ public class MessageListener extends ListenerAdapter {
                 event.getChannel().sendMessage("You misspelled 'like' " + emoticon[rand.nextInt(emoticon.length)]).queue();
             } else if (keyword.contains("i love you")) {
                 event.getMessage().reply("Geez, get a room .-.").queue();
-            } else if (keyword.contains(" mad ")) {
+            } else if (keyword.contains(" mad")) {
                 event.getChannel().sendMessage("madge? lmao").queue();
             } //if
         } //if
