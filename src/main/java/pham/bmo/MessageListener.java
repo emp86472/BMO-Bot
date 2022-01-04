@@ -2,6 +2,7 @@ package pham.bmo;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import pham.bmo.commands.Command;
 
 import java.util.Random;
 
@@ -24,54 +25,13 @@ public class MessageListener extends ListenerAdapter {
 
         String keyword = event.getMessage().getContentRaw();
         keyword = keyword.toLowerCase();
+        String[] token = keyword.split("\\s");
 
-        String[] result = keyword.split("\\s");
-        if (result[0].equals(">>")) {
-                if (result[1].equalsIgnoreCase("compliment")) {
-                    String response;
-                    int chance = rand.nextInt(3);
-                    if (rand.nextInt(50) == 0) {
-                        event.getChannel().sendMessage("nice ass").queue();
-                    } else {
-                        switch (chance) {
-                            case 0:
-                                response = "You are";
-                                response += " " + adverb[rand.nextInt(adverb.length)];
-                                response += " " + adjective[rand.nextInt(adjective.length)];
-                                response += " " + emoticon[rand.nextInt(emoticon.length)];
-                                event.getChannel().sendMessage(response).queue();
-                                break;
-                            case 1:
-                                response = "Your";
-                                response += " " + bodypart[rand.nextInt(bodypart.length)] + " are";
-                                response += " " + adverb[rand.nextInt(adverb.length)];
-                                response += " " + adjective[rand.nextInt(adjective.length)];
-                                response += " " + emoticon[rand.nextInt(emoticon.length)];
-                                event.getChannel().sendMessage(response).queue();
-                                break;
-                            case 2:
-                                response = "You have";
-                                response += " " + adverb[rand.nextInt(adverb.length)];
-                                response += " " + adjective[rand.nextInt(adjective.length)];
-                                response += " " + bodypart[rand.nextInt(bodypart.length)];
-                                response += " " + emoticon[rand.nextInt(emoticon.length)];
-                                event.getChannel().sendMessage(response).queue();
-                                break;
-                        } //switch
-
-                    } //if
-
-                } else if (result[1].equalsIgnoreCase("echo")) {
-                    String response = "";
-                    for (int i = 2; i < result.length; i++) {
-                        response += result[i] + " ";
-                    } //for
-                    event.getChannel().sendMessage(response).queue();
-                } else if (result[1].equalsIgnoreCase("trivia")) {
-                    if (result.length > 3) {
-
-                    } //if
-                } //if
+        if (token[0].equals(">>")) {
+            Command[] command = Command.getCommands();
+            for (int i = 0; i < command.length; i++) {
+                command[i].execute(event);
+            } //for
         } else {
             if (event.getAuthor().getAsTag().equals("synrg#1396")) return;
             if (keyword.contains("candies")) {
@@ -98,7 +58,5 @@ public class MessageListener extends ListenerAdapter {
                 event.getChannel().sendMessage("madge? lmao").queue();
             } //if
         } //if
-
-
     } //onMessageReceived
-}
+} //MessageListener
