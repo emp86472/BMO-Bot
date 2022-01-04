@@ -4,6 +4,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Echo extends Command {
 
+    /**
+     * Constructor for Echo
+     */
     public Echo() {
         super();
         this.setName("Echo");
@@ -22,5 +25,4 @@ public class Echo extends Command {
             event.getChannel().sendMessage(response).queue();
         } //if
     } //execute
-
 } //pham.bmo.commands.Echo

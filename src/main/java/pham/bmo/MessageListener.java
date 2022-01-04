@@ -15,13 +15,7 @@ public class MessageListener extends ListenerAdapter {
         if (event.getMessage().getGuild().getId().equals(BmoBot.testingServerId) != BmoBot.testingMode) return;
         if (event.getAuthor().isBot()) return;
 
-
-        //use this for rng
-        //Random rand = new Random();
-        String[] adverb = {"very", "extremely", "really", "exceptionally", "genuinely"};
-        String[] adjective = {"pretty", "gorgeous", "beautiful", "amazing", "stunning", "adorable", "lovely", "cute"};
         String[] emoticon = {":3", ":)", ":D", "!"};
-        String[] bodypart = {"nails", "eyes", "lips", "eyelashes", "cheeks"};
 
         String keyword = event.getMessage().getContentRaw();
         keyword = keyword.toLowerCase();

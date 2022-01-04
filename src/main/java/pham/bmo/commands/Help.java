@@ -5,6 +5,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Help extends Command {
 
+    /**
+     * Constructor for Help
+     */
     public Help() {
         super();
         this.setName("Help");
@@ -15,7 +18,7 @@ public class Help extends Command {
     @Override
     public void execute(MessageReceivedEvent event) {
         Command command = null;
-        String title = "";
+        String title = "this should never appear";
         String description = "";
 
         String[] token = Command.getTokens(event);
@@ -39,16 +42,15 @@ public class Help extends Command {
                     description += "- " + commandList[i].getName().toLowerCase() + "\n";
                 } //for
             } //if
+
+            //embed stuff
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setTitle(title);
+            eb.setDescription(description);
+            eb.setColor(3974557);
+
+            event.getChannel().sendMessageEmbeds(eb.build()).queue();
         } //if
-
-        //embed stuff
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle(title);
-        eb.setDescription(description);
-        eb.setColor(3974557);
-
-        event.getChannel().sendMessageEmbeds(eb.build()).queue();
-
     } //execute
 
     /**

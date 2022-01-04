@@ -55,7 +55,7 @@ public abstract class Command {
      */
     public static String[] getTokens(MessageReceivedEvent event) {
         String keyword = event.getMessage().getContentRaw();
-        keyword = keyword.toLowerCase();
+        //keyword = keyword.toLowerCase();
         return keyword.split("\\s");
     } //getTokens
 

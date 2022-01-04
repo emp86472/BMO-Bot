@@ -13,6 +13,9 @@ public class Compliment extends Command {
     private final String[] bodypart = {"nails", "eyes", "lips", "eyelashes", "cheeks"};
     private final Random rand = new Random();
 
+    /**
+     * Constructor for Compliment
+     */
     public Compliment() {
         super();
         this.setName("Compliment");
