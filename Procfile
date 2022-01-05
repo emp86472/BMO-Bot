@@ -1,1 +1,1 @@
-worker: java src/main/pham/bmo/BmoBot.java
+worker: java src/main/java/pham/bmo/BmoBot.java
