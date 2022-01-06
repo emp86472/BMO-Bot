@@ -14,7 +14,7 @@ public class MessageListener extends ListenerAdapter {
 
     public void onMessageReceived(MessageReceivedEvent event) {
         //conditions that stop the program
-        if (event.getMessage().getGuild().getId().equals(TEST_SERVER_ID) != TEST_MODE) return;
+        if (event.getMessage().getGuild().getId().equals(System.getenv("TEST_SERVER_ID")) != System.getenv("TEST_MODE")) return;
         if (event.getAuthor().isBot()) return;
 
         String[] emoticon = {":3", ":)", ":D", "!"};
