@@ -3,8 +3,8 @@ package pham.bmo;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import pham.bmo.commands.Command;
-import static pham.config.Config.TEST_MODE;
-import static pham.config.Config.TEST_SERVER_ID;
+//import static pham.config.Config.TEST_MODE;
+//import static pham.config.Config.TEST_SERVER_ID;
 
 import java.util.Random;
 
