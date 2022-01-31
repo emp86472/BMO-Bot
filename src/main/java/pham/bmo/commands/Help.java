@@ -41,6 +41,8 @@ public class Help extends Command {
                 for (int i = 0; i < commandList.length; i++) {
                     description += "- " + commandList[i].getName().toLowerCase() + "\n";
                 } //for
+                description += "\nFor more information on a specific command do:\n" +
+                        ">> help [command]\n";
             } //if
 
             //embed stuff

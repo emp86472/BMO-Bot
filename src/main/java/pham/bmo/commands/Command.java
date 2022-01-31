@@ -65,6 +65,6 @@ public abstract class Command {
      * @return an array of all the commands
      */
     public static Command[] getCommands() {
-        return new Command[]{new Compliment(), new Echo(), new Help()};
+        return new Command[]{new Compliment(), new Echo(), new Help(), new Trivia()};
     } //getCommands
 } //Command
