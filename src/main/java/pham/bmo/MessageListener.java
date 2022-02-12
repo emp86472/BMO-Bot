@@ -1,5 +1,6 @@
 package pham.bmo;
 
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import pham.bmo.commands.Command;
@@ -12,6 +13,7 @@ public class MessageListener extends ListenerAdapter {
 
     private Random rand = new Random();
 
+    @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         //conditions that stop the program
         if (event.getMessage().getGuild().getId().equals(TEST_SERVER_ID) != TEST_MODE) return;
@@ -53,4 +55,17 @@ public class MessageListener extends ListenerAdapter {
             } //if
         } //if
     } //onMessageReceived
+
+    @Override
+    public void onButtonClick(ButtonClickEvent event) {
+        if (event.getComponentId().equals("1")) {
+            event.reply("you pressed A").queue();
+        } else if (event.getComponentId().equals("2")) {
+            event.reply("you pressed B").queue();
+        } else if (event.getComponentId().equals("3")) {
+            event.reply("you pressed C").queue();
+        } else if (event.getComponentId().equals("4")) {
+            event.reply("you pressed D").queue();
+        } //if
+    }
 } //MessageListener
