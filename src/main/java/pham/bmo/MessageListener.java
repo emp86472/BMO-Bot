@@ -86,57 +86,31 @@ public class MessageListener extends ListenerAdapter {
 
             if (buttonID.equals(userID + qID + "A")) {
                 if (ans.equalsIgnoreCase(hm.get("A"))) {
-                    sendEmbed(event, ebcorrect, tq, "A");
+                    Trivia.sendEmbed(event, ebcorrect, tq, "A");
                 } else {
-                    sendEmbed(event, ebwrong, tq, "A");
+                    Trivia.sendEmbed(event, ebwrong, tq, "A");
                 } //if
             } else if (buttonID.equals(userID + qID + "B")) {
                 if (ans.equalsIgnoreCase(hm.get("B"))) {
-                    sendEmbed(event, ebcorrect, tq, "B");
+                    Trivia.sendEmbed(event, ebcorrect, tq, "B");
                 } else {
-                    sendEmbed(event, ebwrong, tq, "B");
+                    Trivia.sendEmbed(event, ebwrong, tq, "B");
                 } //if
             } else if (buttonID.equals(userID + qID + "C")) {
                 if (ans.equalsIgnoreCase(hm.get("C"))) {
-                    sendEmbed(event, ebcorrect, tq, "C");
+                    Trivia.sendEmbed(event, ebcorrect, tq, "C");
                 } else {
-                    sendEmbed(event, ebwrong, tq, "C");
+                    Trivia.sendEmbed(event, ebwrong, tq, "C");
                 } //if
             } else if (buttonID.equals(userID + qID + "D")) {
                 if (ans.equalsIgnoreCase(hm.get("D"))) {
-                    sendEmbed(event, ebcorrect, tq, "D");
+                    Trivia.sendEmbed(event, ebcorrect, tq, "D");
                 } else {
-                    sendEmbed(event, ebwrong, tq, "D");
+                    Trivia.sendEmbed(event, ebwrong, tq, "D");
                 } //if
             } //if
         } //for
     } //onButtonClick
 
-    private static void sendEmbed(ButtonClickEvent event, EmbedBuilder embed, TriviaQuestion tq, String s) {
-        String correctLetter = tq.getCorrectLetter();
-        Button A = Button.secondary("w","A").asDisabled();
-        Button B = Button.secondary("x","B").asDisabled();
-        Button C = Button.secondary("y","C").asDisabled();
-        Button D = Button.secondary("z","D").asDisabled();
-        HashMap<String, Button> hm = new HashMap<>();
-        hm.put("A",A);
-        hm.put("B",B);
-        hm.put("C",C);
-        hm.put("D",D);
-        if (correctLetter.equals(s)) {
-            hm.replace(s, hm.get(s).withStyle(ButtonStyle.SUCCESS));
-        } else {
-            hm.replace(s, hm.get(s).withStyle(ButtonStyle.DANGER));
-        } //if
 
-        event.getInteraction()
-                .getMessage()
-                .editMessageEmbeds(embed.build())
-                .setActionRow(hm.get("A"),
-                        hm.get("B"),
-                        hm.get("C"),
-                        hm.get("D"))
-                .queue();
-        event.deferEdit().queue();
-    } //sendEmbed
 } //MessageListener

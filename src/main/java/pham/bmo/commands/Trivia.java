@@ -5,8 +5,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.ButtonStyle;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -69,4 +71,32 @@ public class Trivia extends Command {
     } // shuffleArray
 
     public LinkedList<TriviaQuestion> getTqList() { return this.tqList; } //getTqList
+
+    public static void sendEmbed(ButtonClickEvent event, EmbedBuilder embed, TriviaQuestion tq, String s) {
+        String correctLetter = tq.getCorrectLetter();
+        Button A = Button.secondary("w","A").asDisabled();
+        Button B = Button.secondary("x","B").asDisabled();
+        Button C = Button.secondary("y","C").asDisabled();
+        Button D = Button.secondary("z","D").asDisabled();
+        HashMap<String, Button> hm = new HashMap<>();
+        hm.put("A",A);
+        hm.put("B",B);
+        hm.put("C",C);
+        hm.put("D",D);
+        if (correctLetter.equals(s)) {
+            hm.replace(s, hm.get(s).withStyle(ButtonStyle.SUCCESS));
+        } else {
+            hm.replace(s, hm.get(s).withStyle(ButtonStyle.DANGER));
+        } //if
+
+        event.getInteraction()
+                .getMessage()
+                .editMessageEmbeds(embed.build())
+                .setActionRow(hm.get("A"),
+                        hm.get("B"),
+                        hm.get("C"),
+                        hm.get("D"))
+                .queue();
+        event.deferEdit().queue();
+    } //sendEmbed
 } //Trivia
