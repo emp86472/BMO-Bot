@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.iwebpp.crypto.TweetNaclFast;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.components.Button;
@@ -16,11 +17,18 @@ import java.util.HashMap;
 
 public class TriviaQuestion {
     private String correctAnswer;
+    private String correctLetter;
     private String userID;
-    private String[] answers;
+    private int questionID;
+    private static int count = 0;
     private String question;
+    private HashMap<String,String> answers = new HashMap();
+    private EmbedBuilder correctAnswerEB;
+    private EmbedBuilder wrongAnswerEB;
 
     public TriviaQuestion(String sURL, MessageReceivedEvent event) {
+        this.questionID = this.count;
+        this.count++;
         try {
             URL url = new URL(sURL);
             InputStreamReader reader = new InputStreamReader(url.openStream());
@@ -35,33 +43,33 @@ public class TriviaQuestion {
                     jObj.get("correct_answer"),
                     jObj.get("incorrect_answers")};
             jArr = elems[5].getAsJsonArray();
-            this.answers = new String[jArr.size() + 1];
-            answers[0] = elems[4].getAsString(); //the correct answer is always at index 0!!!
+            String[] choices = new String[4];
+            choices = new String[jArr.size() + 1];
+            choices[0] = elems[4].getAsString(); //the correct answer is always at index 0!!!
             for (int i = 0; i < jArr.size(); i++) {
-                answers[i + 1] = jArr.get(i).getAsString();
+                choices[i + 1] = jArr.get(i).getAsString();
             } //for
-            this.correctAnswer = answers[0];
-            HashMap<String,String> hm = new HashMap();
-            answers = Trivia.shuffleArray(answers);
-            hm.put("A", answers[0]);
-            hm.put("B", answers[1]);
-            hm.put("C", answers[2]);
-            hm.put("D", answers[3]);
-            String multipleChoice = "\nA. " + hm.get("A")
-                    + "\nB. " + hm.get("B")
-                    + "\nC. " + hm.get("C")
-                    + "\nD. " + hm.get("D");
+            this.correctAnswer = choices[0];
+            choices = Trivia.shuffleArray(choices);
+            this.answers.put("A", choices[0]);
+            this.answers.put("B", choices[1]);
+            this.answers.put("C", choices[2]);
+            this.answers.put("D", choices[3]);
+            this.correctLetter();
+
+            String multipleChoice = "\nA. " + answers.get("A")
+                    + "\nB. " + answers.get("B")
+                    + "\nC. " + answers.get("C")
+                    + "\nD. " + answers.get("D");
             this.userID = event.getMessage().getAuthor().getId();
             this.question = "<@" + this.userID + ">" +
-                    "\nCategory:     " + elems[0].getAsString() +
+                    "\nCategory:   " + elems[0].getAsString() +
                     "\nType:       " + elems[1].getAsString() +
                     "\nDifficulty: " + elems[2].getAsString() +
                     "\n\n" + elems[3].getAsString() + multipleChoice;
 
-            //try making these button static instance variables (make an array of buttons)
-            //then in messageListener disable the buttons
-            //since they are static disabling them should disable all buttons across all trivia objects
-            //you might have to re-enable the buttons on another call to trivia, not sure tho :/
+            setCorrectAnswerEB();
+            setWrongAnswerEB();
 
         } catch (MalformedURLException mue) {
             //print out error how to use command
@@ -71,6 +79,24 @@ public class TriviaQuestion {
         } //try
     } //constructor
 
+    public void setCorrectAnswerEB() {
+        this.correctAnswerEB = new EmbedBuilder();
+        this.correctAnswerEB.setTitle(":white_check_mark: You are correct! Nice");
+        this.correctAnswerEB.setDescription(this.question +
+                "\nThe correct answer is: " +
+                this.correctAnswer);
+        this.correctAnswerEB.setColor(3974557);
+    } //setCorrectAnswerEB
+
+    public void setWrongAnswerEB() {
+        this.wrongAnswerEB = new EmbedBuilder();
+        this.wrongAnswerEB.setTitle(":x: Sorry, that's wrong :(");
+        this.wrongAnswerEB.setDescription(this.question +
+                "\nThe correct answer is: " +
+                "**" + this.correctAnswer + "**");
+        this.wrongAnswerEB.setColor(3974557);
+    } //setWrongAnswerEB
+
     public String getQuestion() {
         return this.question;
     } //getQuestion
@@ -79,11 +105,36 @@ public class TriviaQuestion {
         return this.userID;
     } //getUserId
 
-    public String[] getAnswers() {
+    public HashMap<String, String> getAnswers() {
         return this.answers;
     } //getAnswers
 
     public String getCorrectAnswer() {
         return this.correctAnswer;
     } //getCorrectAnswer
+
+    public int getQuestionID() { return this.questionID; } //getQuestionID
+
+    public EmbedBuilder getCorrectAnswerEB() { return this.correctAnswerEB; }
+
+    public EmbedBuilder getWrongAnswerEB() { return this.wrongAnswerEB; }
+
+    public String getCorrectLetter() {
+        return this.correctLetter;
+    } //getCorrectLetter
+
+    /**
+     * Finding the letter corresponding to the correct answer after the shuffle
+     */
+    private void correctLetter() {
+        if (this.correctAnswer.equalsIgnoreCase(this.answers.get("A"))) {
+            this.correctLetter = "A";
+        } else if (correctAnswer.equalsIgnoreCase(this.answers.get("B"))) {
+            this.correctLetter = "B";
+        } else if (correctAnswer.equalsIgnoreCase(this.answers.get("C"))) {
+            this.correctLetter = "C";
+        } else if (correctAnswer.equalsIgnoreCase(this.answers.get("D"))) {
+            this.correctLetter = "D";
+        } //if
+    } //correctLetter
 } //Trivia Question

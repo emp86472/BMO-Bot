@@ -19,13 +19,12 @@ import java.util.Random;
 public class Trivia extends Command {
 
     String sURL = "https://opentdb.com/api.php?amount=1&type=multiple";
-    static LinkedList<TriviaQuestion> tqList;
+    static LinkedList<TriviaQuestion> tqList = new LinkedList<>();
 
     public Trivia() {
         super();
         this.setName("Trivia");
         this.setDescription("");
-        this.tqList = new LinkedList<>();
     }
     @Override
     public void execute(MessageReceivedEvent event) {
@@ -39,16 +38,18 @@ public class Trivia extends Command {
                 } //if
             } //for
             this.tqList.add(new TriviaQuestion(this.sURL, event));
+            String questionID = this.tqList.getLast().getUserID() + this.tqList.getLast().getQuestionID();
+            //System.out.println(questionID);
             EmbedBuilder eb = new EmbedBuilder();
             eb.setTitle("Here's a question for you!");
-            eb.setDescription(tqList.getLast().getQuestion());
+            eb.setDescription(this.tqList.getLast().getQuestion());
             eb.setColor(3974557);
             event.getChannel()
                     .sendMessageEmbeds(eb.build())
-                    .setActionRow(Button.primary("1","A"),
-                            Button.primary("2","B"),
-                            Button.primary("3","C"),
-                            Button.primary("4","D"))
+                    .setActionRow(Button.primary(questionID + "A","A"),
+                            Button.primary(questionID + "B","B"),
+                            Button.primary(questionID + "C","C"),
+                            Button.primary(questionID + "D","D"))
                     .queue();
 
         } //if
@@ -66,4 +67,6 @@ public class Trivia extends Command {
         } //for
         return array;
     } // shuffleArray
+
+    public LinkedList<TriviaQuestion> getTqList() { return this.tqList; } //getTqList
 } //Trivia
