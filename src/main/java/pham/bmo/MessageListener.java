@@ -4,8 +4,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.components.Button;
-import net.dv8tion.jda.api.interactions.components.ButtonStyle;
 import pham.bmo.commands.Command;
 import pham.bmo.commands.Trivia;
 import pham.bmo.commands.TriviaQuestion;
@@ -13,11 +11,9 @@ import pham.bmo.commands.TriviaQuestion;
 import static pham.config.Config.TEST_MODE;
 import static pham.config.Config.TEST_SERVER_ID;
 
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class MessageListener extends ListenerAdapter {
 
@@ -78,7 +74,7 @@ public class MessageListener extends ListenerAdapter {
 
             TriviaQuestion tq = tqList.get(i); //trivia question object
             String ans = tq.getCorrectAnswer(); //the correct answer
-            int qID = tq.getQuestionID(); //specific question id
+            int qID = tq.getPromptID(); //specific question id
             EmbedBuilder ebcorrect = tq.getCorrectAnswerEB(); //right answer response
             EmbedBuilder ebwrong = tq.getWrongAnswerEB(); //wrong answer response
             HashMap<String,String> hm = tq.getAnswers(); //hashmap of all answers (shuffled)

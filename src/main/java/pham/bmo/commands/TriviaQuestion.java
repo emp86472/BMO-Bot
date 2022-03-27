@@ -4,10 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.iwebpp.crypto.TweetNaclFast;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.interactions.components.Button;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,15 +18,15 @@ public class TriviaQuestion {
     private String correctAnswer;
     private String correctLetter;
     private String userID;
-    private int questionID;
+    private int promptID;
     private static int count = 0;
-    private String question;
+    private String prompt;
     private HashMap<String,String> answers = new HashMap();
     private EmbedBuilder correctAnswerEB;
     private EmbedBuilder wrongAnswerEB;
 
-    public TriviaQuestion(String sURL, MessageReceivedEvent event) {
-        this.questionID = this.count;
+    public TriviaQuestion(String sURL, MessageReceivedEvent event) throws MalformedURLException {
+        this.promptID = this.count;
         this.count++;
         try {
             URL url = new URL(sURL);
@@ -62,18 +61,18 @@ public class TriviaQuestion {
                     + "\nC. " + answers.get("C")
                     + "\nD. " + answers.get("D");
             this.userID = event.getMessage().getAuthor().getId();
-            this.question = "<@" + this.userID + ">" +
+            String question = elems[3].getAsString();
+            question = StringEscapeUtils.unescapeHtml4(question);
+            this.prompt = "<@" + this.userID + ">" +
                     "\nCategory:   " + elems[0].getAsString() +
                     "\nType:       " + elems[1].getAsString() +
                     "\nDifficulty: " + elems[2].getAsString() +
-                    "\n\n" + elems[3].getAsString() + multipleChoice;
+                    "\n\n" + question + multipleChoice;
 
             setCorrectAnswerEB();
             setWrongAnswerEB();
 
-        } catch (MalformedURLException mue) {
-            //print out error how to use command
-        } catch (IOException ioe) {
+        }  catch (IOException ioe) {
             //i think do the same as above
             //this exception shouldn't ever happen O.o
         } //try
@@ -82,7 +81,7 @@ public class TriviaQuestion {
     public void setCorrectAnswerEB() {
         this.correctAnswerEB = new EmbedBuilder();
         this.correctAnswerEB.setTitle(":white_check_mark: You are correct! Nice");
-        this.correctAnswerEB.setDescription(this.question +
+        this.correctAnswerEB.setDescription(this.prompt +
                 "\nThe correct answer is: " +
                 this.correctAnswer);
         this.correctAnswerEB.setColor(3974557);
@@ -90,16 +89,16 @@ public class TriviaQuestion {
 
     public void setWrongAnswerEB() {
         this.wrongAnswerEB = new EmbedBuilder();
-        this.wrongAnswerEB.setTitle(":x: Sorry, that's wrong :(");
-        this.wrongAnswerEB.setDescription(this.question +
+        this.wrongAnswerEB.setTitle(":x: You fucking dumbass LMAO");
+        this.wrongAnswerEB.setDescription(this.prompt +
                 "\nThe correct answer is: " +
                 "**" + this.correctAnswer + "**");
         this.wrongAnswerEB.setColor(3974557);
     } //setWrongAnswerEB
 
-    public String getQuestion() {
-        return this.question;
-    } //getQuestion
+    public String getPrompt() {
+        return this.prompt;
+    } //getPrompt
 
     public String getUserID() {
         return this.userID;
@@ -113,7 +112,7 @@ public class TriviaQuestion {
         return this.correctAnswer;
     } //getCorrectAnswer
 
-    public int getQuestionID() { return this.questionID; } //getQuestionID
+    public int getPromptID() { return this.promptID; } //getPromptID
 
     public EmbedBuilder getCorrectAnswerEB() { return this.correctAnswerEB; }
 

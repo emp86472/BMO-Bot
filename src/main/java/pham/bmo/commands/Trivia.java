@@ -1,19 +1,12 @@
 package pham.bmo.commands;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.components.Button;
 import net.dv8tion.jda.api.interactions.components.ButtonStyle;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
@@ -22,29 +15,100 @@ public class Trivia extends Command {
 
     String sURL = "https://opentdb.com/api.php?amount=1&type=multiple";
     static LinkedList<TriviaQuestion> tqList = new LinkedList<>();
+    HashMap<String,String> categoryMap = new HashMap<String,String>();
 
     public Trivia() {
         super();
         this.setName("Trivia");
-        this.setDescription("");
-    }
+        this.categoryMap.put("general", "9");
+        this.categoryMap.put("books","10");
+        this.categoryMap.put("film","11");
+        this.categoryMap.put("music","12");
+        this.categoryMap.put("theatre","13");
+        this.categoryMap.put("television","14");
+        this.categoryMap.put("videogames","15");
+        this.categoryMap.put("boardgames","16");
+        this.categoryMap.put("nature","17");
+        this.categoryMap.put("computers","18");
+        this.categoryMap.put("math","19");
+        this.categoryMap.put("mythology","20");
+        this.categoryMap.put("sports","21");
+        this.categoryMap.put("geography","22");
+        this.categoryMap.put("history","23");
+        this.categoryMap.put("politics","24");
+        this.categoryMap.put("art","25");
+        this.categoryMap.put("celebrities","26");
+        this.categoryMap.put("animals","27");
+        this.setDescription("A trivia game from opentdb.com!\n" +
+                "Usage: >> trivia [category] [difficulty]\n" +
+                "Categories: \n" +
+                "- General\n" +
+                "- Books\n" +
+                "- Film\n" +
+                "- Music\n" +
+                "- Theatre\n" +
+                "- Television\n" +
+                "- VideoGames\n" +
+                "- BoardGames\n" +
+                "- Nature\n" +
+                "- Computers\n" +
+                "- Math\n" +
+                "- Mythology\n" +
+                "- Sports\n" +
+                "- Geography\n" +
+                "- History\n" +
+                "- Politics\n" +
+                "- Art\n" +
+                "- Celebrities\n" +
+                "- Animals\n");
+    } //trivia
+
     @Override
     public void execute(MessageReceivedEvent event) {
         String[] token = Command.getTokens(event);
         if (token[1].equalsIgnoreCase("trivia")) {
             //search the list for userIDs that exist, if it does exist replace it
-            for (int i = 0; i < tqList.size(); i++) {
-                if (event.getAuthor().getId().equalsIgnoreCase(tqList.get(i).getUserID())) {
-                    tqList.remove(i);
+            for (int i = 0; i < this.tqList.size(); i++) {
+                if (event.getAuthor().getId().equalsIgnoreCase(this.tqList.get(i).getUserID())) {
+                    this.tqList.remove(i);
                     break;
                 } //if
             } //for
-            this.tqList.add(new TriviaQuestion(this.sURL, event));
-            String questionID = this.tqList.getLast().getUserID() + this.tqList.getLast().getQuestionID();
+            //make a hashmap for categories
+            if (token.length > 2) {
+                if (this.categoryMap.containsKey(token[2].toLowerCase())) {
+                    this.sURL += "&category=" + this.categoryMap.get(token[2]);
+                } else {
+                    EmbedBuilder eb = new EmbedBuilder();
+                    eb.setTitle("Sorry that category doesn't exist :/");
+                    eb.setDescription("For a list of categories do:\n>> help trivia");
+                    eb.setColor(3974557);
+                    event.getChannel()
+                            .sendMessageEmbeds(eb.build())
+                            .queue();
+                    return;
+                } //if
+                if (token.length > 3) {
+                    this.sURL += "&difficulty=" + token[3];
+                } //if
+            }//if
+            try {
+                this.tqList.add(new TriviaQuestion(this.sURL, event));
+            } catch (MalformedURLException exception) {
+                EmbedBuilder eb = new EmbedBuilder();
+                eb.setTitle("Sorry that difficulty doesn't exist :/");
+                eb.setDescription("Difficulties are easy, medium, and hard");
+                eb.setColor(3974557);
+                event.getChannel()
+                        .sendMessageEmbeds(eb.build())
+                        .queue();
+                return;
+            } //try
+            String questionID = this.tqList.getLast().getUserID() + this.tqList.getLast().getPromptID();
             //System.out.println(questionID);
             EmbedBuilder eb = new EmbedBuilder();
             eb.setTitle("Here's a question for you!");
-            eb.setDescription(this.tqList.getLast().getQuestion());
+            eb.setDescription(this.tqList.getLast().getPrompt());
             eb.setColor(3974557);
             event.getChannel()
                     .sendMessageEmbeds(eb.build())
