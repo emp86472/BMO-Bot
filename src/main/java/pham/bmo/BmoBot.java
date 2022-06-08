@@ -12,7 +12,7 @@ import javax.security.auth.login.LoginException;
 public class BmoBot {
 
     public static void main(String[] args) throws LoginException {
-        JDA jda = JDABuilder.createLight(BOT_TOKEN, GatewayIntent.GUILD_MESSAGES).build();
+        JDA jda = JDABuilder.createLight(System.getenv().get("BOT_TOKEN"), GatewayIntent.GUILD_MESSAGES).build();
         jda.addEventListener(new MessageListener());
     }
 }

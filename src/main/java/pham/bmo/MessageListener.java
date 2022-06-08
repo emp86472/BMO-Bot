@@ -23,7 +23,7 @@ public class MessageListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         //conditions that stop the program
-        if (event.getMessage().getGuild().getId().equals(TEST_SERVER_ID) != TEST_MODE) return;
+        //if (event.getMessage().getGuild().getId().equals(TEST_SERVER_ID) != TEST_MODE) return;
         if (event.getAuthor().isBot()) return;
 
         String keyword = event.getMessage().getContentRaw();

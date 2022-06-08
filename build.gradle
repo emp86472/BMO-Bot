@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 group 'com.bomb'
@@ -21,7 +22,13 @@ test {
     useJUnitPlatform()
 }
 
-task stage(dependsOn: ['build', 'clean'])
+task stage(dependsOn: ['build', 'shadowJar', 'clean'])
 build.mustRunAfter clean
+
+jar {
+    manifest{
+        attributes 'Class-Path': '/libs/bmo-bot.jar', 'Main-Class': 'pham.bmo.BmoBot'
+    }
+}
 
 
