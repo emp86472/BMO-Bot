@@ -8,9 +8,6 @@ import pham.bmo.commands.Command;
 import pham.bmo.commands.Trivia;
 import pham.bmo.commands.TriviaQuestion;
 
-import static pham.config.Config.TEST_MODE;
-import static pham.config.Config.TEST_SERVER_ID;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
@@ -23,7 +20,6 @@ public class MessageListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         //conditions that stop the program
-        //if (event.getMessage().getGuild().getId().equals(TEST_SERVER_ID) != TEST_MODE) return;
         if (event.getAuthor().isBot()) return;
 
         String keyword = event.getMessage().getContentRaw();
