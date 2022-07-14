@@ -29,12 +29,23 @@ public class SimpleResponse {
             event.getChannel().sendMessage("You misspelled 'like' " + emoticon[rand.nextInt(emoticon.length)]).queue();
         } else if (keyword.contains("i love you")) {
             event.getMessage().reply("Geez, get a room .-.").queue();
-        } else if (keyword.contains("boba")) {
+        } else if (keyword.contains("boba") && odds(10)) {
             event.getMessage().reply("stop buying boba kaitlyn you broke bitch").queue();
-        } else if (keyword.contains("kaitlyn")) {
+        } else if (keyword.contains("kaitlyn") && odds(10)) {
             event.getMessage().reply("she is my maid wassup").queue();
-        } else if (keyword.contains("aadarsh")) {
+        } else if (keyword.contains("aadarsh") && odds(10)) {
             event.getMessage().reply("why yall mention my wife for").queue();
         } //ifw
     } //response
+
+    /**
+     * Useful library class later
+     *
+     * @param percentage
+     * @return boolean
+     */
+    private static boolean odds(int percentage) {
+        Random rand = new Random();
+        return rand.nextInt(1000) < (percentage * 10);
+    } //odds
 }
